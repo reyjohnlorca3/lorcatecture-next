@@ -39,8 +39,26 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
+    const body = new URLSearchParams(
+      Array.from(new FormData(form).entries()).map(([key, value]) => [
+        key,
+        String(value),
+      ]),
+    ).toString();
+
+    const response = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to submit the consultation request.");
+    }
+
     setSent(true);
   }
 
@@ -177,7 +195,13 @@ export default function Home() {
             <p>Your brief has been received. We&apos;ll respond within two business days.</p>
           </div>
         ) : (
-          <form onSubmit={submit}>
+          <form
+            name="consultation"
+            method="POST"
+            data-netlify="true"
+            onSubmit={submit}
+          >
+            <input type="hidden" name="form-name" value="consultation" />
             <label>Full name<input name="name" autoComplete="name" required /></label>
             <label>Email address<input type="email" name="email" autoComplete="email" required /></label>
             <label>Project type
