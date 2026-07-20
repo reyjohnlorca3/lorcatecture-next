@@ -38,38 +38,61 @@ function SectionTitle({ eyebrow, children }: { eyebrow: string; children: React.
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const body = new URLSearchParams(
-      Array.from(new FormData(form).entries()).map(([key, value]) => [
-        key,
-        String(value),
-      ]),
-    ).toString();
+    setSubmitting(true);
+    setSubmitError("");
 
-    const response = await fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-    });
+    try {
+      const body = new URLSearchParams(
+        Array.from(new FormData(form).entries()).map(([key, value]) => [
+          key,
+          String(value),
+        ]),
+      ).toString();
 
-    if (!response.ok) {
-      throw new Error("Unable to submit the consultation request.");
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to submit the consultation request.");
+      }
+
+      form.reset();
+      setSent(true);
+    } catch {
+      setSubmitError(
+        "We couldn't send your request. Please check your connection and try again.",
+      );
+    } finally {
+      setSubmitting(false);
     }
-
-    setSent(true);
   }
 
   return (
-    <main>
+    <>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
+      <main id="main-content">
       <header className="nav">
         <a className="brand" href="#top" aria-label="Lorcatecture Group home">
           <strong>Lorcatecture<br />Group</strong>
           <span>Architecture · Design · Legacy</span>
         </a>
-        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="main-nav">
+        <button
+          className="menu-button"
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-expanded={menuOpen}
+          aria-controls="main-nav"
+          aria-label={menuOpen ? "Close primary navigation" : "Open primary navigation"}
+        >
           {menuOpen ? "Close" : "Menu"}
         </button>
         <nav id="main-nav" className={menuOpen ? "open" : ""} aria-label="Primary navigation">
@@ -199,9 +222,14 @@ export default function Home() {
             name="consultation"
             method="POST"
             data-netlify="true"
+            data-netlify-honeypot="company"
             onSubmit={submit}
+            aria-describedby="form-help form-status"
           >
             <input type="hidden" name="form-name" value="consultation" />
+            <p className="honeypot" aria-hidden="true">
+              <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
+            </p>
             <label>Full name<input name="name" autoComplete="name" required /></label>
             <label>Email address<input type="email" name="email" autoComplete="email" required /></label>
             <label>Project type
@@ -211,8 +239,13 @@ export default function Home() {
               </select>
             </label>
             <label>Tell us about your project<textarea name="brief" rows={5} required /></label>
-            <button className="gold-button" type="submit">Request a consultation</button>
-            <small>We respond to all enquiries within two business days.</small>
+            <button className="gold-button" type="submit" disabled={submitting}>
+              {submitting ? "Sending request…" : "Request a consultation"}
+            </button>
+            <p id="form-status" className="form-status" role="status" aria-live="polite">
+              {submitError}
+            </p>
+            <small id="form-help">We respond to all enquiries within two business days.</small>
           </form>
         )}
       </section>
@@ -225,6 +258,7 @@ export default function Home() {
         </nav>
         <p>© {new Date().getFullYear()} Lorcatecture Group. All rights reserved.</p>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }

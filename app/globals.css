@@ -8,10 +8,15 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans), sans-serif; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans), sans-serif; line-height: 1.5; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 em { color: var(--gold); font-weight: 400; }
+[id] { scroll-margin-top: 24px; }
+
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 1000; padding: 12px 16px; background: white; color: var(--ink); transform: translateY(-160%); transition: transform .2s ease; }
+.skip-link:focus { transform: translateY(0); }
+:focus-visible { outline: 3px solid #e8c989; outline-offset: 4px; }
 
 .nav { height: 112px; padding: 0 7vw; display: flex; align-items: center; gap: 4vw; position: absolute; inset: 0 0 auto; z-index: 10; color: white; }
 .brand { display: flex; flex-direction: column; min-width: 160px; }
@@ -23,6 +28,8 @@ em { color: var(--gold); font-weight: 400; }
 .outline-button, .gold-button { display: inline-flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 30px; border: 1px solid rgba(201,170,112,.75); color: white; background: transparent; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; cursor: pointer; }
 .gold-button { background: var(--gold); border-color: var(--gold); color: white; }
 .outline-button:hover, .gold-button:hover { filter: brightness(1.1); }
+.outline-button, .gold-button, .menu-button, .nav a, footer a, .journal-grid a { transition: color .2s ease, background-color .2s ease, border-color .2s ease, filter .2s ease; }
+.gold-button:disabled { cursor: wait; opacity: .58; filter: none; }
 
 .hero { min-height: 760px; height: 100vh; position: relative; display: flex; align-items: center; color: white; overflow: hidden; }
 .hero > img { object-fit: cover; }
@@ -85,6 +92,8 @@ select option { color: #111; }
 input:focus, select:focus, textarea:focus { border-color: var(--gold); }
 textarea { resize: vertical; }
 form small { color: #777; font-size: 9px; text-align: center; }
+.honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form-status { min-height: 1.5em; margin: -8px 0 0; color: #f1b7a7; font-size: 12px; line-height: 1.5; text-align: center; }
 .success { border: 1px solid var(--gold); min-height: 430px; padding: 50px; display: grid; place-content: center; text-align: center; }
 .success span { color: var(--gold); font-size: 38px; }
 .success h3 { font: 400 36px var(--font-display), serif; }
@@ -128,5 +137,5 @@ footer .brand { color: white; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition: none !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

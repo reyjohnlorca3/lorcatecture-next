@@ -29,7 +29,23 @@ export const metadata: Metadata = {
     description: "Architecture that endures generations.",
     url: "https://www.lorcatecture.com",
     siteName: "Lorcatecture Group",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85",
+        width: 1200,
+        height: 630,
+        alt: "Lorcatecture Group architecture",
+      },
+    ],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lorcatecture Group",
+    description: "Architecture that endures generations.",
+    images: [
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85",
+    ],
   },
 };
 
