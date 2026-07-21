@@ -20,10 +20,10 @@ const projects = [
 ];
 
 const team = [
-  { name: "Rey John Lorca", role: "Founder and CEO", image: "photo-1560250097-0b93528c311a" },
-  { name: "Isabela Santos", role: "Design Director", image: "photo-1573496359142-b8d87734a5a2" },
-  { name: "Marco Navarro", role: "Principal, Singapore", image: "photo-1472099645785-5658abf4ff4e" },
-  { name: "Leila Osman", role: "Principal, Dubai", image: "photo-1594744803329-e58b31de8bf5" },
+  { name: "Rey John Lorca", role: "Founder and CEO", image: "/rey-john-lorca.jpg" },
+  { name: "Isabela Santos", role: "Design Director", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=85" },
+  { name: "Marco Navarro", role: "Principal, Singapore", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=700&q=85" },
+  { name: "Leila Osman", role: "Principal, Dubai", image: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=700&q=85" },
 ];
 
 function SectionTitle({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
@@ -168,7 +168,7 @@ export default function Home() {
           {team.map((person) => (
             <article key={person.name}>
               <div className="portrait">
-                <Image src={`https://images.unsplash.com/${person.image}?w=700&q=85`} alt={`${person.name}, ${person.role}`} fill sizes="(max-width: 700px) 100vw, 25vw" />
+                <Image src={person.image} alt={`${person.name}, ${person.role}`} fill sizes="(max-width: 700px) 100vw, 25vw" />
               </div>
               <h3>{person.name}</h3>
               <p>{person.role}</p>
